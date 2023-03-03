@@ -121,6 +121,7 @@ celerybeat-schedule
 celerybeat.pid
 
 ServiceAccountKey.json
+global air pollution dataset.csv
 # SageMath parsed files
 *.sage.py
 
