@@ -1,5 +1,5 @@
 import FireBaseAdmn from 'firebase-admin';
-import * as key from "../air-pollution-70068-firebase-adminsdk-cp5xq-fd6fc16fa4.json"
+import * as key from "./air-pollution-70068-firebase-adminsdk-pzqkq-0f0b221f89.json"
 import JsonLdObJ from '../Types';
 
 
@@ -28,7 +28,9 @@ class FireBase {
     async getData(): Promise<JsonLdObJ> {
 
         let resp: JsonLdObJ = {
-            "@context": "firebase",
+            "@context": {
+                "@schema": "firebase"
+            },
             "@type": "air_pollution",
             "@list": []
         }
@@ -44,6 +46,7 @@ class FireBase {
             });
 
         } catch (err) {
+            console.log(err);
             console.log("An error occured while fetching data");
         }
         return resp;

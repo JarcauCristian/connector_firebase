@@ -174,3 +174,4 @@ poetry.toml
 
 # End of https://www.toptal.com/developers/gitignore/api/python
 connector/node_modules
+connector/src/controllers/air-pollution-70068-firebase-adminsdk-pzqkq-0f0b221f89.json

@@ -31,17 +31,17 @@ class Retrieve {
         return resp.sendStatus(400);
       }
 
-      // let retrievedData:JsonLdObJ;
-      // try
-      // {
-      //   retrievedData = await fireBaseInst.getData();
+      let retrievedData:JsonLdObJ;
+      try
+      {
+        retrievedData = await fireBaseInst.getData();
         
-      //   resp.status(200).json(retrievedData);
+        resp.status(200).json(retrievedData);
 
-      // } catch(err){
-      //     resp.sendStatus(500);
-      // }
-       return resp.sendStatus(200);
+      } catch(err){
+          resp.sendStatus(500);
+      }
+       
     }
 
 }
