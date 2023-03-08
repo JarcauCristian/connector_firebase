@@ -25,25 +25,47 @@ class FireBase {
         this.db = FireBaseAdmn.firestore();
     }
 
-    async getData(): Promise<JsonLdObJ> {
+    async getData(data_type: string, snippet: string): Promise<JsonLdObJ> {
 
         let resp: JsonLdObJ = {
             "@context": {
                 "@schema": "firebase"
             },
-            "@type": "air_pollution",
+            "@type": data_type,
             "@list": []
         }
         try {
-            const airPollution = this.db.collection('air_pollution');
-            const snapshot = await airPollution.limit(5).get();
 
-            snapshot.forEach(doc => {
-                resp['@list'].push({
-                    "@id": doc.id,
-                    ...doc.data()
-                })
-            });
+            
+            const airPollution = this.db.collection(data_type.substring(1,data_type.length-1));
+            if(snippet === 'true'){
+                const snapshot = await airPollution.limit(10).get();
+                if(snapshot.empty){
+                    console.log("The collection doesn't exist or it's empty!");
+                    resp['@type'] = "Type doesn't exist"
+                }else{
+                    snapshot.forEach(doc => {
+                        resp['@list'].push({
+                            "@id": doc.id,
+                            ...doc.data()
+                        })
+                    });
+                }
+            }else{
+                const snapshot = await airPollution.limit(20).get();
+                if(snapshot.empty){
+                    console.log("The collection doesn't exist or it's empty!");
+                    resp['@type'] = "Type doesn't exist"
+                }else{
+                    snapshot.forEach(doc => {
+                        resp['@list'].push({
+                            "@id": doc.id,
+                            ...doc.data()
+                        })
+                    });
+            
+                }
+            }
 
         } catch (err) {
             console.log(err);

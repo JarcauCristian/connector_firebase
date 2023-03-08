@@ -36,10 +36,10 @@ class Retrieve {
       let retrievedData:JsonLdObJ;
       try
       {
-        retrievedData = await fireBaseInst.getData();
 
+        retrievedData = await fireBaseInst.getData(req.query.data_type,requestedSnippet);
         resp.status(200).json(retrievedData);
-
+        
       } catch(err){
           resp.sendStatus(500);
       }
