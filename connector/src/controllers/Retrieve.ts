@@ -3,7 +3,7 @@ import JsonLdObJ from "../Types";
 import { fireBaseInst } from "./FireBase";
 
 class Retrieve {
-    //http://localhost:nr_port/get_data?data_type=<tipul specificat>
+    //http://localhost:nr_port/get_data?data_type=<tipul specificat>&snippet=true
     public path=""
     public router = express.Router();
 
@@ -17,16 +17,18 @@ class Retrieve {
 
     async getData(req:any,resp:any):Promise<any>{
 
-      if(!req.query.data_type)
-        return resp.sendStatus(404);
-     
       const requestedDataType:string = req.query.data_type;
-      if(requestedDataType.length === 0)
+      const requestedSnippet:string = req.query.snippet;
+
+      if(!req.query.data_type || !req.query.snippet)
+        return resp.sendStatus(404);
+
+      if(requestedDataType.length === 0 || requestedSnippet.length === 0)
       {
          return resp.sendStatus(400);
       }
 
-      if(requestedDataType !== "air_pollution")
+      if(requestedSnippet !== "true" && requestedSnippet !== "false")
       {
         return resp.sendStatus(400);
       }
@@ -34,10 +36,10 @@ class Retrieve {
       let retrievedData:JsonLdObJ;
       try
       {
-        retrievedData = await fireBaseInst.getData();
-        
-        resp.status(200).json(retrievedData);
 
+        retrievedData = await fireBaseInst.getData(req.query.data_type,requestedSnippet);
+        resp.status(200).json(retrievedData);
+        
       } catch(err){
           resp.sendStatus(500);
       }
