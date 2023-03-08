@@ -36,7 +36,7 @@ class Retrieve {
       let retrievedData:JsonLdObJ;
       try
       {
-
+        console.log(req.query.data_type);
         retrievedData = await fireBaseInst.getData(req.query.data_type,requestedSnippet);
         resp.status(200).json(retrievedData);
         

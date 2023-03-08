@@ -37,7 +37,7 @@ class FireBase {
         try {
 
             
-            const airPollution = this.db.collection(data_type.substring(1,data_type.length-1));
+            const airPollution = this.db.collection(data_type);
             if(snippet === 'true'){
                 const snapshot = await airPollution.limit(10).get();
                 if(snapshot.empty){
