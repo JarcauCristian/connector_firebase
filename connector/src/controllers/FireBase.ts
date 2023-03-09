@@ -52,7 +52,7 @@ class FireBase {
                     });
                 }
             }else{
-                const snapshot = await airPollution.limit(20).get();
+                const snapshot = await airPollution.get();
                 if(snapshot.empty){
                     console.log("The collection doesn't exist or it's empty!");
                     resp['@type'] = "Type doesn't exist"
