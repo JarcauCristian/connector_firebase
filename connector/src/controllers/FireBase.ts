@@ -29,9 +29,8 @@ class FireBase {
 
         let resp: JsonLdObJ = {
             "@context": {
-                "@schema": "firebase"
+                "@schema": "firebase/" + data_type
             },
-            "@type": data_type,
             "@list": []
         }
         try {
@@ -42,7 +41,7 @@ class FireBase {
                 const snapshot = await airPollution.limit(10).get();
                 if(snapshot.empty){
                     console.log("The collection doesn't exist or it's empty!");
-                    resp['@type'] = "Type doesn't exist"
+                    resp['@context'] = {"@schema": "Type doesn't exist"}
                 }else{
                     snapshot.forEach(doc => {
                         resp['@list'].push({
@@ -55,7 +54,7 @@ class FireBase {
                 const snapshot = await airPollution.get();
                 if(snapshot.empty){
                     console.log("The collection doesn't exist or it's empty!");
-                    resp['@type'] = "Type doesn't exist"
+                    resp['@context'] = {"@schema": "Type doesn't exist"}
                 }else{
                     snapshot.forEach(doc => {
                         resp['@list'].push({

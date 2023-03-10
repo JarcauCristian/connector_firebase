@@ -1,6 +1,5 @@
 interface JsonLdObJ  {
     "@context":Object,
-    "@type":string,
     "@list":Array<Object>
 }
 
