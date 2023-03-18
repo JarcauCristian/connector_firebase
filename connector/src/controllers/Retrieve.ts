@@ -12,6 +12,7 @@ class Retrieve {
     }
     public initRoutes():void{
         this.router.get('/get_data',this.getData);
+        this.router.get('/get_meta',this.getMeta);
     }
 
 
@@ -38,6 +39,19 @@ class Retrieve {
       {
 
         retrievedData = await fireBaseInst.getData(req.query.data_type,requestedSnippet);
+        resp.status(200).json(retrievedData);
+        
+      } catch(err){
+          resp.sendStatus(500);
+      }
+       
+    }
+
+    async getMeta(req:any,resp:any):Promise<any>{
+      
+      try
+      {
+        const retrievedData = await fireBaseInst.getMeta();
         resp.status(200).json(retrievedData);
         
       } catch(err){

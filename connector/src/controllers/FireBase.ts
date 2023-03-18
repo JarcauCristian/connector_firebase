@@ -7,6 +7,7 @@ import validate from '../Validation';
 class FireBase {
 
     public static fireBaseInst = new FireBase();
+    public collections : Array<string> = []
     public db: FireBaseAdmn.firestore.Firestore;
 
 
@@ -37,7 +38,6 @@ class FireBase {
             "@list": []
         }
         try {
-            
             const dataSet = this.db.collection(data_type);
             if(snippet === 'true'){
                 const snapshot = await dataSet.limit(10).get();
@@ -73,10 +73,49 @@ class FireBase {
         } catch (err) {
             console.log(err);
             console.log("An error occured while fetching data");
+            throw err;
         }
         return resp;
     }
 
+    async getMeta(): Promise<any> {
+        let JsonLDMeta : any = {
+            "@context": {"@schema": "Firebase"}
+        };
+        try {
+            const collections = await this.db.listCollections();
+            collections.forEach(async(collection) => {
+                this.collections.push(collection.id);
+            });
+
+            for (var i of this.collections) {
+                const dataSet = this.db.collection(i);
+                const snapshot = await dataSet.limit(1).get();
+                if (!snapshot.empty) {
+                    snapshot.forEach((doc) => {
+                        const keys = Object.keys(doc.data());
+                        let parameters: string = "";
+                        keys.forEach((key) => {
+                            if (key.includes("AQI"))
+                            {
+                                parameters += key.replace("AQI", "Air Quality") + ",";
+                            }
+                            else
+                            {
+                                parameters += key + ",";
+                            }
+                        });
+                        JsonLDMeta[i] =  parameters.slice(0, -1);
+
+
+                    })
+                }
+            }
+        } catch (err) {
+            throw err;
+        }
+        return JsonLDMeta;
+    }
 }
 
 export const fireBaseInst: FireBase = FireBase.getInstance();
