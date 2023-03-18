@@ -1,6 +1,7 @@
 import FireBaseAdmn from 'firebase-admin';
 import * as key from "./air-pollution-70068-firebase-adminsdk-pzqkq-0f0b221f89.json"
 import JsonLdObJ from '../Types';
+import validate from '../Validation';
 
 
 class FireBase {
@@ -27,6 +28,8 @@ class FireBase {
 
     async getData(data_type: string, snippet: string): Promise<JsonLdObJ> {
 
+            
+
         let resp: JsonLdObJ = {
             "@context": {
                 "@schema": "firebase/" + data_type
@@ -34,16 +37,16 @@ class FireBase {
             "@list": []
         }
         try {
-
             
-            const airPollution = this.db.collection(data_type);
+            const dataSet = this.db.collection(data_type);
             if(snippet === 'true'){
-                const snapshot = await airPollution.limit(10).get();
+                const snapshot = await dataSet.limit(10).get();
                 if(snapshot.empty){
                     console.log("The collection doesn't exist or it's empty!");
                     resp['@context'] = {"@schema": "Type doesn't exist"}
                 }else{
-                    snapshot.forEach(doc => {
+                    const data = validate(snapshot, 30);
+                    data.forEach((doc:any) => {
                         resp['@list'].push({
                             "@id": doc.id,
                             ...doc.data()
@@ -51,12 +54,13 @@ class FireBase {
                     });
                 }
             }else{
-                const snapshot = await airPollution.get();
+                const snapshot = await dataSet.get();
                 if(snapshot.empty){
                     console.log("The collection doesn't exist or it's empty!");
                     resp['@context'] = {"@schema": "Type doesn't exist"}
                 }else{
-                    snapshot.forEach(doc => {
+                    const data = validate(snapshot, 30);
+                    data.forEach((doc:any) => {
                         resp['@list'].push({
                             "@id": doc.id,
                             ...doc.data()
